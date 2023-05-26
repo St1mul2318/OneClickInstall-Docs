@@ -54,5 +54,4 @@ jobs:
                    ARGUMENTS="-arg '--skiphardwarecheck true --makeswap false'" \
                    vagrant up
                 sleep 300
-                vagrant package --output repacked_${{ matrix.boxes }}.box
                 bash install.sh
