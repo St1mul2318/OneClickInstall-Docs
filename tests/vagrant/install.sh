@@ -157,7 +157,7 @@ END
 # Outputs:
 #   Script log
 #############################################################################################
-function install_workspace() {
+function install_docs() {
 	if [ "${DOWNLOAD_SCRIPTS}" == 'true' ]; then
             wget https://download.onlyoffice.com/install/docs-install.sh
         fi
