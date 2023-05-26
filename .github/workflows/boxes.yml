@@ -34,19 +34,25 @@ jobs:
         python-version: '3.x'
 
     - name: Build boxes
-      run: |
-        set -eux
-        pwd          
-        export date=$(date +%F)
-        sleep 300
-          TEST_CASE='--production-install' \
-          DISTR='generic' \
-          OS='${{ matrix.boxes }}' \
-          DOWNLOAD_SCRIPT='-ds true' \
-          RAM='9100' \
-          CPU='3' \
-          ARGUMENTS="-arg '--skiphardwarecheck true --makeswap false'" \
-          vagrant up
-        sleep 300
-        vagrant package --output repacked_${{ matrix.boxes }}.box
-        bash install.sh
+      uses: nick-fields/retry@v2
+      with:
+        max_attempts: 3
+        timeout_minutes: 240
+        retry_on: error
+        command: |
+                set -eux
+                
+                cd tests/vagrant
+                export date=$(date +%F)
+                sleep 300
+                   TEST_CASE='--production-install' \
+                   DISTR='generic' \
+                   OS='${{ matrix.boxes }}' \
+                   DOWNLOAD_SCRIPT='-ds true' \
+                   RAM='9100' \
+                   CPU='3' \
+                   ARGUMENTS="-arg '--skiphardwarecheck true --makeswap false'" \
+                   vagrant up
+                sleep 300
+                vagrant package --output repacked_${{ matrix.boxes }}.box
+                bash install.sh

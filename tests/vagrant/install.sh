@@ -149,7 +149,7 @@ END
 }
 
 #############################################################################################
-# Install workspace and then healthcheck
+# Install docs and then healthcheck
 # Globals:
 #   None
 # Arguments:
@@ -239,7 +239,7 @@ function services_logs() {
   local CONVERTER_LOGS_DIR="${DOCS_LOGS_DIR}/converter"
   local METRICS_LOGS_DIR="${DOCS_LOGS_DIR}/metrics"
        
-#  ARRAY_MAIN_SERVICES_LOGS=($(ls ${MAIN_LOGS_DIR} | grep log | sed 's/web.sql.log//;s/web.api.log//;s/nginx.*//' ))
+  ARRAY_MAIN_SERVICES_LOGS=($(ls ${MAIN_LOGS_DIR} | grep log | sed 's/web.sql.log//;s/web.api.log//;s/nginx.*//' ))
   ARRAY_DOCSERVICE_LOGS=($(ls ${DOCSERVICE_LOGS_DIR}))
   ARRAY_CONVERTER_LOGS=($(ls ${CONVERTER_LOGS_DIR}))
   ARRAY_METRICS_LOGS=($(ls ${METRICS_LOGS_DIR}))
@@ -251,7 +251,7 @@ function services_logs() {
     echo ---------------------------------------
     echo "${COLOR_GREEN}logs from file: ${file}${COLOR_RESET}"
     echo ---------------------------------------
-     cat ${MAIN_LOGS_DIR}/${file} || true
+    cat ${MAIN_LOGS_DIR}/${file} || true
   done
   
   echo             "-----------------------------------"
@@ -298,10 +298,8 @@ main() {
   services_logs
   healthcheck_systemd_services
   healthcheck_general_status
-  echo ">>>> HEALTHCHECK <<<<"
+  echo ">>>> CURL LOCALHOST HEALTHCHECK <<<<"
   curl localhost/healthcheck
 }
 
 main
-
-#curl localhost/healthcheck
