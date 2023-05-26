@@ -139,8 +139,8 @@ END
   # Clean up home folder
   rm -rf /home/vagrant/*
 
-  if [ -d /tmp/workspace ]; then
-          mv /tmp/workspace/* /home/vagrant
+  if [ -d /tmp/docs ]; then
+          mv /tmp/docs/* /home/vagrant
   fi
 
   echo '127.0.0.1 host4test' | sudo tee -a /etc/hosts   
