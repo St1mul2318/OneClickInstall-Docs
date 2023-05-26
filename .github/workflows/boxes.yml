@@ -34,10 +34,11 @@ jobs:
         python-version: '3.x'
 
     - name: Build boxes
-       run: |
-         set -eux       
-         export date=$(date +%F)
-         sleep 300
+      run: |
+        set -eux
+        pwd          
+        export date=$(date +%F)
+        sleep 300
           TEST_CASE='--production-install' \
           DISTR='generic' \
           OS='${{ matrix.boxes }}' \
@@ -46,5 +47,6 @@ jobs:
           CPU='3' \
           ARGUMENTS="-arg '--skiphardwarecheck true --makeswap false'" \
           vagrant up
-         sleep 300
-         bash install.sh
+        sleep 300
+        vagrant package --output repacked_${{ matrix.boxes }}.box
+        bash install.sh
