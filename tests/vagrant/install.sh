@@ -233,8 +233,8 @@ function services_logs() {
     journalctl -u $service || true
   done
   
-#  local MAIN_LOGS_DIR="/var/log/onlyoffice"
-#  local DOCS_LOGS_DIR="${MAIN_LOGS_DIR}/documentserver"
+  local MAIN_LOGS_DIR="/var/log/onlyoffice"
+  local DOCS_LOGS_DIR="${MAIN_LOGS_DIR}/documentserver"
   local DOCSERVICE_LOGS_DIR="${DOCS_LOGS_DIR}/docservice"
   local CONVERTER_LOGS_DIR="${DOCS_LOGS_DIR}/converter"
   local METRICS_LOGS_DIR="${DOCS_LOGS_DIR}/metrics"
@@ -244,15 +244,15 @@ function services_logs() {
   ARRAY_CONVERTER_LOGS=($(ls ${CONVERTER_LOGS_DIR}))
   ARRAY_METRICS_LOGS=($(ls ${METRICS_LOGS_DIR}))
   
-#  echo             "-----------------------------------"
-#  echo "${COLOR_YELLOW} Check logs for main services ${COLOR_RESET}"
-#  echo             "-----------------------------------"
-#  for file in ${ARRAY_MAIN_SERVICES_LOGS[@]}; do
-#    echo ---------------------------------------
-#    echo "${COLOR_GREEN}logs from file: ${file}${COLOR_RESET}"
-#    echo ---------------------------------------
-#    cat ${MAIN_LOGS_DIR}/${file} || true
-#  done
+  echo             "-----------------------------------"
+  echo "${COLOR_YELLOW} Check logs for main services ${COLOR_RESET}"
+  echo             "-----------------------------------"
+  for file in ${ARRAY_MAIN_SERVICES_LOGS[@]}; do
+    echo ---------------------------------------
+    echo "${COLOR_GREEN}logs from file: ${file}${COLOR_RESET}"
+    echo ---------------------------------------
+     cat ${MAIN_LOGS_DIR}/${file} || true
+  done
   
   echo             "-----------------------------------"
   echo "${COLOR_YELLOW} Check logs for Docservice ${COLOR_RESET}"
