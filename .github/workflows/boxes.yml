@@ -22,7 +22,7 @@ jobs:
           - debian11
           - ubuntu1804
           - ubuntu2004
-          - ubuntu 2204
+          - ubuntu2204
           
     steps:
     - name: Checkout code
