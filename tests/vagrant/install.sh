@@ -159,10 +159,10 @@ END
 #############################################################################################
 function install_workspace() {
 	if [ "${DOWNLOAD_SCRIPTS}" == 'true' ]; then
-            wget https://download.onlyoffice.com/install/workspace-install.sh
+            wget https://download.onlyoffice.com/install/docs-install.sh
         fi
         
-	printf "N\nY\nY" | bash workspace-install.sh ${ARGUMENTS}
+	printf "N\nY\nY" | bash docs-install.sh ${ARGUMENTS}
 
 	if [[ $? != 0 ]]; then
 	    echo "Exit code non-zero. Exit with 1."
@@ -233,26 +233,26 @@ function services_logs() {
     journalctl -u $service || true
   done
   
-  local MAIN_LOGS_DIR="/var/log/onlyoffice"
-  local DOCS_LOGS_DIR="${MAIN_LOGS_DIR}/documentserver"
+#  local MAIN_LOGS_DIR="/var/log/onlyoffice"
+#  local DOCS_LOGS_DIR="${MAIN_LOGS_DIR}/documentserver"
   local DOCSERVICE_LOGS_DIR="${DOCS_LOGS_DIR}/docservice"
   local CONVERTER_LOGS_DIR="${DOCS_LOGS_DIR}/converter"
   local METRICS_LOGS_DIR="${DOCS_LOGS_DIR}/metrics"
        
-  ARRAY_MAIN_SERVICES_LOGS=($(ls ${MAIN_LOGS_DIR} | grep log | sed 's/web.sql.log//;s/web.api.log//;s/nginx.*//' ))
+#  ARRAY_MAIN_SERVICES_LOGS=($(ls ${MAIN_LOGS_DIR} | grep log | sed 's/web.sql.log//;s/web.api.log//;s/nginx.*//' ))
   ARRAY_DOCSERVICE_LOGS=($(ls ${DOCSERVICE_LOGS_DIR}))
   ARRAY_CONVERTER_LOGS=($(ls ${CONVERTER_LOGS_DIR}))
   ARRAY_METRICS_LOGS=($(ls ${METRICS_LOGS_DIR}))
   
-  echo             "-----------------------------------"
-  echo "${COLOR_YELLOW} Check logs for main services ${COLOR_RESET}"
-  echo             "-----------------------------------"
-  for file in ${ARRAY_MAIN_SERVICES_LOGS[@]}; do
-    echo ---------------------------------------
-    echo "${COLOR_GREEN}logs from file: ${file}${COLOR_RESET}"
-    echo ---------------------------------------
-    cat ${MAIN_LOGS_DIR}/${file} || true
-  done
+#  echo             "-----------------------------------"
+#  echo "${COLOR_YELLOW} Check logs for main services ${COLOR_RESET}"
+#  echo             "-----------------------------------"
+#  for file in ${ARRAY_MAIN_SERVICES_LOGS[@]}; do
+#    echo ---------------------------------------
+#    echo "${COLOR_GREEN}logs from file: ${file}${COLOR_RESET}"
+#    echo ---------------------------------------
+#    cat ${MAIN_LOGS_DIR}/${file} || true
+#  done
   
   echo             "-----------------------------------"
   echo "${COLOR_YELLOW} Check logs for Docservice ${COLOR_RESET}"
@@ -293,13 +293,15 @@ main() {
   common::get_colors
   prepare_vm
   check_hw
-  install_workspace
+  install_docs
   sleep 120
   services_logs
   healthcheck_systemd_services
   healthcheck_general_status
+  echo ">>>> HEALTHCHECK <<<<"
+  curl localhost/healthcheck
 }
 
 main
 
-curl localhost/healthcheck
+#curl localhost/healthcheck
