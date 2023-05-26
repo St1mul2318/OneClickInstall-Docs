@@ -1,0 +1,55 @@
+run-name: Build Boxes
+
+on:
+  push:
+
+defaults:
+  run:
+    working-directory: 'tests/vagrant'
+
+jobs:
+  vagrant-up:
+    name: "Build box with ${{matrix.boxes}}"
+    runs-on: macos-12
+    strategy:
+      fail-fast: false
+      matrix:
+        boxes:
+          - centos7
+          - centos8s
+          - centos9s
+          - debian10
+          - debian11
+          - ubuntu1804
+          - ubuntu2004
+          - ubuntu 2204
+          
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Build boxes
+      uses: nick-fields/retry@v2
+      with:
+        command: |
+                set -eux
+                
+                cd tests/vagrant
+                export date=$(date +%F)
+                sleep 300
+                   TEST_CASE='--production-install' \
+                   DISTR='generic' \
+                   OS='${{ matrix.boxes }}' \
+                   DOWNLOAD_SCRIPT='-ds true' \
+                   RAM='9100' \
+                   CPU='3' \
+                   ARGUMENTS="-arg '--skiphardwarecheck true --makeswap false'" \
+                   vagrant up
+                sleep 300
+                vagrant package --output repacked_${{ matrix.boxes }}.box
+                bash install.sh
